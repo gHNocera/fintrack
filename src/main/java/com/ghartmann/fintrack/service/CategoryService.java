@@ -11,8 +11,10 @@ import com.ghartmann.fintrack.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.ghartmann.fintrack.repository.TransactionRepository;
 
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final TransactionRepository transactionRepository;
 
     @Transactional
     public CategoryResponse create(CategoryRequest request) {
@@ -64,7 +67,13 @@ public class CategoryService {
 
     @Transactional
     public void delete(Long id) {
-        categoryRepository.delete(getOwnedCategory(id));
+        Category category = getOwnedCategory(id);
+
+        if (transactionRepository.existsByCategoryId(id)) {
+            throw new ConflictException("Não é possível apagar: a categoria possui transações");
+        }
+
+        categoryRepository.delete(category);
     }
 
     private Category getOwnedCategory(Long id) {
