@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-FintrackApplication<fintrack>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "fintrack.FintrackApplication",
+            "projectName": "fintrack",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

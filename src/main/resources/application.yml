@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: fintrack
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fintrack
+    username: fintrack
+    password: fintrack
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
