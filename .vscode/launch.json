@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "FintrackApplication",
+            "request": "launch",
+            "mainClass": "com.ghartmann.fintrack.FintrackApplication",
+            "projectName": "fintrack"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-FintrackApplication<fintrack>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
