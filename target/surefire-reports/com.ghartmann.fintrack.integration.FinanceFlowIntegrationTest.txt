@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.ghartmann.fintrack.integration.FinanceFlowIntegrationTest
 -------------------------------------------------------------------------------
-Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.003 s -- in com.ghartmann.fintrack.integration.FinanceFlowIntegrationTest
+Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.933 s -- in com.ghartmann.fintrack.integration.FinanceFlowIntegrationTest

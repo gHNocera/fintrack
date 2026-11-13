@@ -19,9 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import com.ghartmann.fintrack.config.OpenApiConfig;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 
+@Tag(name = "Transações", description = "Receitas e despesas, com filtros e paginação")
+@SecurityRequirement(name = OpenApiConfig.BEARER_SCHEME)
 @RestController
 @RequestMapping("/transactions")
 @RequiredArgsConstructor
@@ -34,7 +40,10 @@ public class TransactionController {
     public TransactionResponse create(@Valid @RequestBody TransactionRequest request) {
         return transactionService.create(request);
     }
-
+    
+    @Operation(summary = "Lista transações do usuário",
+            description = "Todos os filtros são opcionais. Datas no formato AAAA-MM-DD. "
+            + "Resultado paginado (size máximo 100), da data mais recente para a mais antiga.")
     @GetMapping
     public PageResponse<TransactionResponse> findAll(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,

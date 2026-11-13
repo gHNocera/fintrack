@@ -1,4 +1,5 @@
 com\ghartmann\fintrack\integration\UserIsolationIntegrationTest.class
+com\ghartmann\fintrack\integration\OpenApiIntegrationTest.class
 com\ghartmann\fintrack\integration\AuthIntegrationTest.class
 com\ghartmann\fintrack\integration\UserIsolationIntegrationTest$OwnerData.class
 com\ghartmann\fintrack\service\SummaryServiceTest.class

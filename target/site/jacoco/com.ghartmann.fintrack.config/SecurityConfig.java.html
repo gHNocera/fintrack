@@ -27,7 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 <span class="fc" id="L27">                .csrf(csrf -&gt; csrf.disable())</span>
 <span class="fc" id="L28">                .sessionManagement(session -&gt; session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))</span>
 <span class="fc" id="L29">                .authorizeHttpRequests(auth -&gt; auth</span>
-<span class="fc" id="L30">                        .requestMatchers(&quot;/auth/**&quot;, &quot;/error&quot;).permitAll()</span>
+<span class="fc" id="L30">                        .requestMatchers(&quot;/auth/**&quot;, &quot;/error&quot;, &quot;/v3/api-docs/**&quot;, &quot;/swagger-ui/**&quot;, &quot;/swagger-ui.html&quot;).permitAll()</span>
 <span class="fc" id="L31">                        .anyRequest().authenticated())</span>
 <span class="fc" id="L32">                .exceptionHandling(handling -&gt; handling.authenticationEntryPoint((request, response, ex) -&gt; {</span>
 <span class="fc" id="L33">                    response.setStatus(401);</span>

@@ -17,6 +17,7 @@ com\ghartmann\fintrack\dto\SummaryResponse.class
 com\ghartmann\fintrack\exception\ResourceNotFoundException.class
 com\ghartmann\fintrack\repository\TransactionSpecifications.class
 com\ghartmann\fintrack\controller\CategoryController.class
+com\ghartmann\fintrack\config\OpenApiConfig.class
 com\ghartmann\fintrack\dto\CategoryTotal.class
 com\ghartmann\fintrack\dto\TransactionRequest.class
 com\ghartmann\fintrack\exception\ApiError.class

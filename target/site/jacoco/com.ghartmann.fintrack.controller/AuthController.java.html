@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = &quot;Autenticação&quot;, description = &quot;Cadastro e login&quot;)
 @RestController
 @RequestMapping(&quot;/auth&quot;)
 @RequiredArgsConstructor
@@ -24,12 +26,12 @@ public class AuthController {
     @PostMapping(&quot;/register&quot;)
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse register(@Valid @RequestBody RegisterRequest request) {
-<span class="fc" id="L27">        return authService.register(request);</span>
+<span class="fc" id="L29">        return authService.register(request);</span>
     }
 
     @PostMapping(&quot;/login&quot;)
     public AuthResponse login(@Valid @RequestBody LoginRequest request) {
-<span class="fc" id="L32">        return authService.login(request);</span>
+<span class="fc" id="L34">        return authService.login(request);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

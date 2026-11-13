@@ -8,9 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.ghartmann.fintrack.config.OpenApiConfig;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.YearMonth;
 
+@Tag(name = &quot;Resumo&quot;, description = &quot;Resumo mensal de receitas, despesas e saldo&quot;)
+@SecurityRequirement(name = OpenApiConfig.BEARER_SCHEME)
 @RestController
 @RequestMapping(&quot;/summary&quot;)
 @RequiredArgsConstructor
@@ -18,11 +24,14 @@ public class SummaryController {
 
     private final SummaryService summaryService;
 
+    @Operation(summary = &quot;Resumo do mês&quot;,
+            description = &quot;Total de receitas, despesas, saldo e despesas por categoria. &quot;
+            + &quot;Formato do mês: AAAA-MM. Sem o parâmetro, usa o mês atual.&quot;)
     @GetMapping
     public SummaryResponse getSummary(
             @RequestParam(required = false) @DateTimeFormat(pattern = &quot;yyyy-MM&quot;) YearMonth month) {
-<span class="pc bpc" id="L24" title="1 of 2 branches missed.">        YearMonth target = (month != null) ? month : YearMonth.now();</span>
-<span class="fc" id="L25">        return summaryService.getMonthlySummary(target);</span>
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        YearMonth target = (month != null) ? month : YearMonth.now();</span>
+<span class="fc" id="L34">        return summaryService.getMonthlySummary(target);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
