@@ -1,1 +1,13 @@
+com\ghartmann\fintrack\integration\UserIsolationIntegrationTest.class
+com\ghartmann\fintrack\integration\AuthIntegrationTest.class
+com\ghartmann\fintrack\integration\UserIsolationIntegrationTest$OwnerData.class
+com\ghartmann\fintrack\service\SummaryServiceTest.class
+com\ghartmann\fintrack\service\TransactionServiceTest.class
+com\ghartmann\fintrack\service\AuthServiceTest.class
+com\ghartmann\fintrack\support\TestcontainersConfiguration.class
+com\ghartmann\fintrack\service\CategoryServiceTest.class
+com\ghartmann\fintrack\service\CurrentUserServiceTest.class
+com\ghartmann\fintrack\support\IntegrationTestSupport.class
+com\ghartmann\fintrack\security\JwtServiceTest.class
 com\ghartmann\fintrack\FintrackApplicationTests.class
+com\ghartmann\fintrack\integration\FinanceFlowIntegrationTest.class

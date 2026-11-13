@@ -1,13 +1,11 @@
 package com.ghartmann.fintrack;
 
+import com.ghartmann.fintrack.support.IntegrationTestSupport;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class FintrackApplicationTests {
+class FintrackApplicationTests extends IntegrationTestSupport {
 
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void contextLoads() {
+    }
 }

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoryService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.ghartmann.fintrack.service</a> &gt; <span class="el_source">CategoryService.java</span></div><h1>CategoryService.java</h1><pre class="source lang-java linenums">package com.ghartmann.fintrack.service;
+
+import com.ghartmann.fintrack.domain.Category;
+import com.ghartmann.fintrack.domain.User;
+import com.ghartmann.fintrack.dto.CategoryRequest;
+import com.ghartmann.fintrack.dto.CategoryResponse;
+import com.ghartmann.fintrack.exception.ConflictException;
+import com.ghartmann.fintrack.exception.ResourceNotFoundException;
+import com.ghartmann.fintrack.repository.CategoryRepository;
+import com.ghartmann.fintrack.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.ghartmann.fintrack.repository.TransactionRepository;
+
+import java.util.List;
+
+
+@Service
+@RequiredArgsConstructor
+public class CategoryService {
+
+    private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+    private final TransactionRepository transactionRepository;
+    private final CurrentUserService currentUserService;
+
+    @Transactional
+    public CategoryResponse create(CategoryRequest request) {
+<span class="fc" id="L30">        String name = request.name().trim();</span>
+<span class="fc" id="L31">        checkNameIsAvailable(name);</span>
+
+<span class="fc" id="L33">        User user = userRepository.findById(currentUserService.getCurrentUserId())</span>
+<span class="pc" id="L34">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Usuário não encontrado&quot;));</span>
+
+<span class="fc" id="L36">        Category saved = categoryRepository.save(new Category(name, user));</span>
+<span class="fc" id="L37">        return CategoryResponse.from(saved);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public List&lt;CategoryResponse&gt; findAll() {
+<span class="fc" id="L42">        return categoryRepository.findAllByUserIdOrderByNameAsc(currentUserService.getCurrentUserId())</span>
+<span class="fc" id="L43">                .stream()</span>
+<span class="fc" id="L44">                .map(CategoryResponse::from)</span>
+<span class="fc" id="L45">                .toList();</span>
+    }
+
+    @Transactional(readOnly = true)
+    public CategoryResponse findById(Long id) {
+<span class="fc" id="L50">        return CategoryResponse.from(getOwnedCategory(id));</span>
+    }
+
+    @Transactional
+    public CategoryResponse update(Long id, CategoryRequest request) {
+<span class="fc" id="L55">        Category category = getOwnedCategory(id);</span>
+<span class="fc" id="L56">        String name = request.name().trim();</span>
+
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (!category.getName().equals(name)) {</span>
+<span class="fc" id="L59">            checkNameIsAvailable(name);</span>
+        }
+
+<span class="fc" id="L62">        category.setName(name);</span>
+<span class="fc" id="L63">        return CategoryResponse.from(category);</span>
+    }
+
+    @Transactional
+    public void delete(Long id) {
+<span class="fc" id="L68">        Category category = getOwnedCategory(id);</span>
+
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (transactionRepository.existsByCategoryId(id)) {</span>
+<span class="fc" id="L71">            throw new ConflictException(&quot;Não é possível apagar: a categoria possui transações&quot;);</span>
+        }
+
+<span class="fc" id="L74">        categoryRepository.delete(category);</span>
+<span class="fc" id="L75">    }</span>
+
+    private Category getOwnedCategory(Long id) {
+<span class="fc" id="L78">        return categoryRepository.findByIdAndUserId(id, currentUserService.getCurrentUserId())</span>
+<span class="fc" id="L79">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Categoria não encontrada&quot;));</span>
+    }
+
+    private void checkNameIsAvailable(String name) {
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        if (categoryRepository.existsByNameAndUserId(name, currentUserService.getCurrentUserId())) {</span>
+<span class="fc" id="L84">            throw new ConflictException(&quot;Já existe uma categoria com o nome '&quot; + name + &quot;'&quot;);</span>
+        }
+<span class="fc" id="L86">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

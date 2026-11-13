@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JwtService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.ghartmann.fintrack.security</a> &gt; <span class="el_source">JwtService.java</span></div><h1>JwtService.java</h1><pre class="source lang-java linenums">package com.ghartmann.fintrack.security;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import javax.crypto.SecretKey;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+
+@Service
+public class JwtService {
+
+    private final SecretKey key;
+    private final long expirationMinutes;
+
+    public JwtService(@Value(&quot;${app.jwt.secret}&quot;) String secret,
+<span class="fc" id="L21">                      @Value(&quot;${app.jwt.expiration-minutes}&quot;) long expirationMinutes) {</span>
+<span class="fc" id="L22">        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));</span>
+<span class="fc" id="L23">        this.expirationMinutes = expirationMinutes;</span>
+<span class="fc" id="L24">    }</span>
+
+    public String generateToken(UserPrincipal user) {
+<span class="fc" id="L27">        Instant now = Instant.now();</span>
+<span class="fc" id="L28">        return Jwts.builder()</span>
+<span class="fc" id="L29">                .subject(user.getUsername())</span>
+<span class="fc" id="L30">                .issuedAt(Date.from(now))</span>
+<span class="fc" id="L31">                .expiration(Date.from(now.plus(expirationMinutes, ChronoUnit.MINUTES)))</span>
+<span class="fc" id="L32">                .signWith(key)</span>
+<span class="fc" id="L33">                .compact();</span>
+    }
+
+    // Valida assinatura e validade. Se algo estiver errado, lança exceção.
+    public String extractEmail(String token) {
+<span class="fc" id="L38">        return Jwts.parser()</span>
+<span class="fc" id="L39">                .verifyWith(key)</span>
+<span class="fc" id="L40">                .build()</span>
+<span class="fc" id="L41">                .parseSignedClaims(token)</span>
+<span class="fc" id="L42">                .getPayload()</span>
+<span class="fc" id="L43">                .getSubject();</span>
+    }
+
+    public long getExpirationSeconds() {
+<span class="fc" id="L47">        return expirationMinutes * 60;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

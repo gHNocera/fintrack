@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransactionRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.ghartmann.fintrack.dto</a> &gt; <span class="el_source">TransactionRequest.java</span></div><h1>TransactionRequest.java</h1><pre class="source lang-java linenums">package com.ghartmann.fintrack.dto;
+
+import com.ghartmann.fintrack.domain.TransactionType;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+<span class="fc" id="L13">public record TransactionRequest(</span>
+        @NotBlank(message = &quot;A descrição é obrigatória&quot;)
+        @Size(max = 200, message = &quot;A descrição deve ter no máximo 200 caracteres&quot;)
+        String description,
+
+        @NotNull(message = &quot;O valor é obrigatório&quot;)
+        @DecimalMin(value = &quot;0.01&quot;, message = &quot;O valor deve ser maior que zero&quot;)
+        @Digits(integer = 10, fraction = 2, message = &quot;O valor deve ter no máximo 10 dígitos e 2 casas decimais&quot;)
+        BigDecimal amount,
+
+        @NotNull(message = &quot;O tipo é obrigatório (INCOME ou EXPENSE)&quot;)
+        TransactionType type,
+
+        @NotNull(message = &quot;A data é obrigatória&quot;)
+        LocalDate date,
+
+        @NotNull(message = &quot;A categoria é obrigatória&quot;)
+        Long categoryId
+) {
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

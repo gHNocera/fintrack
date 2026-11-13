@@ -1,7 +1,12 @@
 C:\Users\Gabriel\Documents\gitHub\fintrack\src\test\java\com\ghartmann\fintrack\FintrackApplicationTests.java
+C:\Users\Gabriel\Documents\gitHub\fintrack\src\test\java\com\ghartmann\fintrack\integration\AuthIntegrationTest.java
+C:\Users\Gabriel\Documents\gitHub\fintrack\src\test\java\com\ghartmann\fintrack\integration\FinanceFlowIntegrationTest.java
+C:\Users\Gabriel\Documents\gitHub\fintrack\src\test\java\com\ghartmann\fintrack\integration\UserIsolationIntegrationTest.java
 C:\Users\Gabriel\Documents\gitHub\fintrack\src\test\java\com\ghartmann\fintrack\security\JwtServiceTest.java
 C:\Users\Gabriel\Documents\gitHub\fintrack\src\test\java\com\ghartmann\fintrack\service\AuthServiceTest.java
 C:\Users\Gabriel\Documents\gitHub\fintrack\src\test\java\com\ghartmann\fintrack\service\CategoryServiceTest.java
 C:\Users\Gabriel\Documents\gitHub\fintrack\src\test\java\com\ghartmann\fintrack\service\CurrentUserServiceTest.java
 C:\Users\Gabriel\Documents\gitHub\fintrack\src\test\java\com\ghartmann\fintrack\service\SummaryServiceTest.java
 C:\Users\Gabriel\Documents\gitHub\fintrack\src\test\java\com\ghartmann\fintrack\service\TransactionServiceTest.java
+C:\Users\Gabriel\Documents\gitHub\fintrack\src\test\java\com\ghartmann\fintrack\support\IntegrationTestSupport.java
+C:\Users\Gabriel\Documents\gitHub\fintrack\src\test\java\com\ghartmann\fintrack\support\TestcontainersConfiguration.java

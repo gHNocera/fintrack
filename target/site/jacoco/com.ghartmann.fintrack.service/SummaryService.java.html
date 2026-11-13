@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SummaryService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.ghartmann.fintrack.service</a> &gt; <span class="el_source">SummaryService.java</span></div><h1>SummaryService.java</h1><pre class="source lang-java linenums">package com.ghartmann.fintrack.service;
+
+import com.ghartmann.fintrack.domain.TransactionType;
+import com.ghartmann.fintrack.dto.CategoryTotal;
+import com.ghartmann.fintrack.dto.SummaryResponse;
+import com.ghartmann.fintrack.repository.TransactionRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class SummaryService {
+
+    private final CurrentUserService currentUserService;
+
+    private final TransactionRepository transactionRepository;
+
+    @Transactional(readOnly = true)
+    public SummaryResponse getMonthlySummary(YearMonth month) {
+<span class="fc" id="L26">        LocalDate start = month.atDay(1);</span>
+<span class="fc" id="L27">        LocalDate end = month.atEndOfMonth();</span>
+
+<span class="fc" id="L29">        BigDecimal totalIncome = orZero(</span>
+<span class="fc" id="L30">                transactionRepository.sumByType(currentUserService.getCurrentUserId(), TransactionType.INCOME, start, end));</span>
+<span class="fc" id="L31">        BigDecimal totalExpense = orZero(</span>
+<span class="fc" id="L32">                transactionRepository.sumByType(currentUserService.getCurrentUserId(), TransactionType.EXPENSE, start, end));</span>
+<span class="fc" id="L33">        BigDecimal balance = totalIncome.subtract(totalExpense);</span>
+
+<span class="fc" id="L35">        List&lt;CategoryTotal&gt; expensesByCategory =</span>
+<span class="fc" id="L36">                transactionRepository.sumByCategory(currentUserService.getCurrentUserId(), TransactionType.EXPENSE, start, end);</span>
+
+<span class="fc" id="L38">        return new SummaryResponse(month.toString(), totalIncome, totalExpense, balance, expensesByCategory);</span>
+    }
+
+    // O SUM devolve null quando não há linhas; aqui transformamos em 0,00
+    private BigDecimal orZero(BigDecimal value) {
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        return value == null ? BigDecimal.ZERO.setScale(2) : value;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

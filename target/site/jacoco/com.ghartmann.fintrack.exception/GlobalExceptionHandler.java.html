@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.ghartmann.fintrack.exception</a> &gt; <span class="el_source">GlobalExceptionHandler.java</span></div><h1>GlobalExceptionHandler.java</h1><pre class="source lang-java linenums">package com.ghartmann.fintrack.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.security.core.AuthenticationException;
+
+import java.time.Instant;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+@RestControllerAdvice
+<span class="fc" id="L17">public class GlobalExceptionHandler {</span>
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity&lt;ApiError&gt; handleNotFound(ResourceNotFoundException ex) {
+<span class="fc" id="L21">        return build(HttpStatus.NOT_FOUND, ex.getMessage(), Map.of());</span>
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity&lt;ApiError&gt; handleConflict(ConflictException ex) {
+<span class="fc" id="L26">        return build(HttpStatus.CONFLICT, ex.getMessage(), Map.of());</span>
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity&lt;ApiError&gt; handleBadRequest(BadRequestException ex) {
+<span class="fc" id="L31">        return build(HttpStatus.BAD_REQUEST, ex.getMessage(), Map.of());</span>
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity&lt;ApiError&gt; handleAuthentication(AuthenticationException ex) {
+<span class="fc" id="L36">        return build(HttpStatus.UNAUTHORIZED, &quot;E-mail ou senha inválidos&quot;, Map.of());</span>
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;ApiError&gt; handleValidation(MethodArgumentNotValidException ex) {
+<span class="fc" id="L41">        Map&lt;String, String&gt; fieldErrors = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L42">        ex.getBindingResult().getFieldErrors()</span>
+<span class="fc" id="L43">                .forEach(error -&gt; fieldErrors.put(error.getField(), error.getDefaultMessage()));</span>
+<span class="fc" id="L44">        return build(HttpStatus.BAD_REQUEST, &quot;Dados inválidos&quot;, fieldErrors);</span>
+    }
+
+    // JSON malformado, tipo errado (ex.: &quot;type&quot;: &quot;FOO&quot;) ou data em formato inválido
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity&lt;ApiError&gt; handleUnreadable(HttpMessageNotReadableException ex) {
+<span class="fc" id="L50">        return build(HttpStatus.BAD_REQUEST,</span>
+                &quot;Corpo da requisição inválido. Verifique o JSON, os tipos e o formato das datas (AAAA-MM-DD)&quot;,
+<span class="fc" id="L52">                Map.of());</span>
+    }
+
+    // Parâmetro de URL inválido (ex.: ?from=abc ou ?type=FOO)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity&lt;ApiError&gt; handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+<span class="fc" id="L58">        return build(HttpStatus.BAD_REQUEST,</span>
+<span class="fc" id="L59">                &quot;Valor inválido para o parâmetro '&quot; + ex.getName() + &quot;'&quot;,</span>
+<span class="fc" id="L60">                Map.of());</span>
+    }
+
+    private ResponseEntity&lt;ApiError&gt; build(HttpStatus status, String message, Map&lt;String, String&gt; fieldErrors) {
+<span class="fc" id="L64">        ApiError body = new ApiError(Instant.now(), status.value(), status.getReasonPhrase(), message, fieldErrors);</span>
+<span class="fc" id="L65">        return ResponseEntity.status(status).body(body);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
