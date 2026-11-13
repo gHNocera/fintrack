@@ -17,8 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SummaryService {
 
-    // TEMPORÁRIO: na Fase 3 isso será substituído pelo usuário logado (JWT).
-    private static final Long TEMP_USER_ID = 1L;
+    private final CurrentUserService currentUserService;
 
     private final TransactionRepository transactionRepository;
 
@@ -28,13 +27,13 @@ public class SummaryService {
         LocalDate end = month.atEndOfMonth();
 
         BigDecimal totalIncome = orZero(
-                transactionRepository.sumByType(TEMP_USER_ID, TransactionType.INCOME, start, end));
+                transactionRepository.sumByType(currentUserService.getCurrentUserId(), TransactionType.INCOME, start, end));
         BigDecimal totalExpense = orZero(
-                transactionRepository.sumByType(TEMP_USER_ID, TransactionType.EXPENSE, start, end));
+                transactionRepository.sumByType(currentUserService.getCurrentUserId(), TransactionType.EXPENSE, start, end));
         BigDecimal balance = totalIncome.subtract(totalExpense);
 
         List<CategoryTotal> expensesByCategory =
-                transactionRepository.sumByCategory(TEMP_USER_ID, TransactionType.EXPENSE, start, end);
+                transactionRepository.sumByCategory(currentUserService.getCurrentUserId(), TransactionType.EXPENSE, start, end);
 
         return new SummaryResponse(month.toString(), totalIncome, totalExpense, balance, expensesByCategory);
     }

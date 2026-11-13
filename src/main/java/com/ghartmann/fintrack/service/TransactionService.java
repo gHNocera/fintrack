@@ -28,8 +28,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class TransactionService {
 
-    // TEMPORÁRIO: na Fase 3 isso será substituído pelo usuário logado (JWT).
-    private static final Long TEMP_USER_ID = 1L;
+    private final CurrentUserService currentUserService;
     private static final int MAX_PAGE_SIZE = 100;
 
     private final TransactionRepository transactionRepository;
@@ -39,7 +38,7 @@ public class TransactionService {
     @Transactional
     public TransactionResponse create(TransactionRequest request) {
         Category category = getOwnedCategory(request.categoryId());
-        User user = userRepository.findById(TEMP_USER_ID)
+        User user = userRepository.findById(currentUserService.getCurrentUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
         Transaction transaction = new Transaction(
@@ -61,7 +60,7 @@ public class TransactionService {
             throw new BadRequestException("A data inicial não pode ser posterior à data final");
         }
 
-        Specification<Transaction> spec = TransactionSpecifications.belongsToUser(TEMP_USER_ID);
+        Specification<Transaction> spec = TransactionSpecifications.belongsToUser(currentUserService.getCurrentUserId());
         if (from != null) {
             spec = spec.and(TransactionSpecifications.dateFrom(from));
         }
@@ -111,12 +110,12 @@ public class TransactionService {
     }
 
     private Transaction getOwnedTransaction(Long id) {
-        return transactionRepository.findByIdAndUserId(id, TEMP_USER_ID)
+        return transactionRepository.findByIdAndUserId(id, currentUserService.getCurrentUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("Transação não encontrada"));
     }
 
     private Category getOwnedCategory(Long categoryId) {
-        return categoryRepository.findByIdAndUserId(categoryId, TEMP_USER_ID)
+        return categoryRepository.findByIdAndUserId(categoryId, currentUserService.getCurrentUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
     }
 }

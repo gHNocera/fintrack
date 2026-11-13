@@ -20,19 +20,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryService {
 
-    // TEMPORÁRIO
-    private static final Long TEMP_USER_ID = 1L;
-
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
+    private final CurrentUserService currentUserService;
 
     @Transactional
     public CategoryResponse create(CategoryRequest request) {
         String name = request.name().trim();
         checkNameIsAvailable(name);
 
-        User user = userRepository.findById(TEMP_USER_ID)
+        User user = userRepository.findById(currentUserService.getCurrentUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
         Category saved = categoryRepository.save(new Category(name, user));
@@ -41,7 +39,7 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public List<CategoryResponse> findAll() {
-        return categoryRepository.findAllByUserIdOrderByNameAsc(TEMP_USER_ID)
+        return categoryRepository.findAllByUserIdOrderByNameAsc(currentUserService.getCurrentUserId())
                 .stream()
                 .map(CategoryResponse::from)
                 .toList();
@@ -77,12 +75,12 @@ public class CategoryService {
     }
 
     private Category getOwnedCategory(Long id) {
-        return categoryRepository.findByIdAndUserId(id, TEMP_USER_ID)
+        return categoryRepository.findByIdAndUserId(id, currentUserService.getCurrentUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
     }
 
     private void checkNameIsAvailable(String name) {
-        if (categoryRepository.existsByNameAndUserId(name, TEMP_USER_ID)) {
+        if (categoryRepository.existsByNameAndUserId(name, currentUserService.getCurrentUserId())) {
             throw new ConflictException("Já existe uma categoria com o nome '" + name + "'");
         }
     }
