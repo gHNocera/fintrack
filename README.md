@@ -1,6 +1,6 @@
 # FinTrack API
 
-[![CI](https://github.com/gHNocera /fintrack/actions/workflows/ci.yml/badge.svg)](https://github.com/gHNocera/fintrack/actions/workflows/ci.yml)
+[![CI](https://github.com/gHNocera/fintrack/actions/workflows/ci.yml/badge.svg)](https://github.com/gHNocera/fintrack/actions/workflows/ci.yml)
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4-brightgreen)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue)
@@ -44,8 +44,8 @@ Quis reunir em um único sistema o que uma API de backend precisa ter além do C
 Pré-requisito: Docker.
 
 ```bash
-git clone https://github.com/gHNocera /fintrack.git
-cd fintrack-api
+git clone https://github.com/gHNocera/fintrack.git
+cd fintrack
 cp .env.example .env
 # edite o .env e defina JWT_SECRET (o arquivo explica como gerar a chave)
 docker compose up --build
