@@ -1,5 +1,5 @@
 # ---------- Etapa 1: compilar ----------
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM maven:3.9-eclipse-temurin-26 AS build
 WORKDIR /app
 
 # Copia só o pom primeiro: o Docker reaproveita o cache das dependências
