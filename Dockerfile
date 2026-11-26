@@ -10,7 +10,7 @@ COPY src ./src
 RUN mvn -B package -DskipTests
 
 # ---------- Etapa 2: executar ----------
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:25-jre
 WORKDIR /app
 
 # Usuário sem privilégios: o app não roda como root
